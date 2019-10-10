@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/draw"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--主界面-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background"
+            android:orientation="vertical">
+            <TabHost
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/tabs">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TabWidget
+                        android:id="@android:id/tabs"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"/>
+                    <FrameLayout
+                        android:id="@android:id/tabcontent"
+                        android:layout_above="@android:id/tabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <!--新课程-->
+                        <LinearLayout
+                            android:id="@+id/tab_NewCourse"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <!--搜索框-->
+                            <androidx.appcompat.widget.SearchView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp"
+                                />
+                            <LinearLayout
+                                android:id="@+id/Course_Frag"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <!--这里是Fragment新课程布局的引入-->
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!--讲师列表-->
+                        <LinearLayout
+                            android:id="@+id/tab_Lecturers"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <LinearLayout
+                                android:id="@+id/Lecturers_Frag"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <!--这里是Fragment讲师列表布局的引入-->
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                        <!--微课堂报名-->
+                        <LinearLayout
+                            android:id="@+id/tab_Tutorial"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="50dp"
+                                android:text="这里是"/>
+
+                        </LinearLayout>
+                        <!--查询报名-->
+                        <LinearLayout
+                            android:id="@+id/tab_Search"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="50dp"
+                                android:text="这里是个人页"/>
+
+                        </LinearLayout>
+                    </FrameLayout>
+                </RelativeLayout>
+            </TabHost>
+
+        </LinearLayout>
+        <include layout="@layout/public_drawer"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</LinearLayout>

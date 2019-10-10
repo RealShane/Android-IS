@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/back_button"
+        android:icon="@drawable/ic_arrow_left"
+        app:showAsAction="always"
+        android:title="back_button" />
+    <item
+        android:id="@+id/drawer_button"
+        android:icon="@drawable/ic_drawer"
+        app:showAsAction="always"
+        android:title="list" />
+
+</menu>

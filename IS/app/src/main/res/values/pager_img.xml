@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="second_class" type="id"></item>
+    <item name="origin" type="id"></item>
+    <item name="post_office" type="id"></item>
+</resources>

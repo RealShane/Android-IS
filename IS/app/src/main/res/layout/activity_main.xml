@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/draw"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--主界面-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background"
+            android:orientation="vertical">
+            <TabHost
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/tabhost">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TabWidget
+                        android:id="@android:id/tabs"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"/>
+                    <FrameLayout
+                        android:id="@android:id/tabcontent"
+                        android:layout_above="@android:id/tabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:id="@+id/tab_IS"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <!--这里放综合系统布局-->
+                                <!--搜索框-->
+                                <androidx.appcompat.widget.SearchView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="15dp"
+                                    android:paddingRight="15dp"
+                                    />
+                                <!--banner轮播-->
+                                <include layout="@layout/public_banner"/>
+                                <!--综合系统文字-->
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:textSize="10dp"
+                                    android:text="综合系统"
+                                    />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="15dp"
+                                    android:orientation="vertical"
+                                    >
+                                    <!--第二课堂-->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:background="@drawable/text_view"
+                                        >
+                                        <ImageButton
+                                            android:onClick="Second_Class"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/ic_order"
+                                            android:layout_gravity="center"
+                                            />
+                                        <TextView
+                                            android:onClick="Second_Class"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="30dp"
+                                            android:textColor="#000000"
+                                            android:text="@string/second_class"
+                                            />
+
+                                        <ImageButton
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:background="@drawable/ic_arrow_right"
+                                            android:onClick="Second_Class" />
+                                    </LinearLayout>
+                                    <!--综合测评-->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:background="@drawable/text_view"
+                                        >
+                                        <ImageButton
+                                            android:onClick="Undone"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/ic_calculator"
+                                            android:layout_gravity="center"
+                                            />
+                                        <TextView
+                                            android:onClick="Undone"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="30dp"
+                                            android:textColor="#000000"
+                                            android:text="@string/origin"
+                                            />
+
+                                        <ImageButton
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:background="@drawable/ic_arrow_right"
+                                            android:onClick="Undone" />
+                                    </LinearLayout>
+
+                                    <!--时光邮箱-->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:background="@drawable/text_view"
+                                        >
+                                        <ImageButton
+                                            android:onClick="Undone"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/ic_email"
+                                            android:layout_gravity="center"
+                                            />
+                                        <TextView
+                                            android:onClick="Undone"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="30dp"
+                                            android:textColor="#000000"
+                                            android:text="@string/post_office"
+                                            />
+
+                                        <ImageButton
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:background="@drawable/ic_arrow_right"
+                                            android:onClick="Undone" />
+                                    </LinearLayout>
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!--这里是个人页面布局引入-->
+                        <include layout="@layout/public_personal"/>
+                    </FrameLayout>
+                </RelativeLayout>
+            </TabHost>
+
+        </LinearLayout>
+        <include layout="@layout/public_drawer"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</LinearLayout>
