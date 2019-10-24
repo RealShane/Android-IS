@@ -32,6 +32,8 @@ public class DrawerTabFragment extends AppCompatActivity {
                 .setContent(R.id.tab_personal));
     }
 
+
+
     //抽屉显示
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

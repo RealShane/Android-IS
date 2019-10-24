@@ -3,72 +3,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:padding="15dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="5dp"
     android:layout_gravity="left"
-    android:background="@drawable/background"
+    android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:onClick="Second_Class_Link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageButton
-            android:src="@drawable/ic_order"
-            android:onClick="Second_Class"
-            android:id="@+id/drawerSecondClass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="Second_Class"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="30dp"
-            android:text="@string/second_class"/>
-    </LinearLayout>
+        android:layout_centerInParent="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="10dp"
+        android:text="@string/second_class"
+        app:qmui_isRadiusAdjustBounds="true"/>
 
-    <LinearLayout
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:onClick="Undone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageButton
-            android:src="@drawable/ic_calculator"
-            android:onClick="Undone"
-            android:id="@+id/drawerOrigin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="Undone"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="30dp"
-            android:text="@string/origin"/>
-    </LinearLayout>
+        android:layout_centerInParent="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="10dp"
+        android:text="@string/origin"
+        app:qmui_isRadiusAdjustBounds="true"/>
 
-    <LinearLayout
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:onClick="Undone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageButton
-            android:src="@drawable/ic_email"
-            android:onClick="Undone"
-            android:id="@+id/drawerPostOffice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="Undone"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="30dp"
-            android:text="@string/post_office"/>
-    </LinearLayout>
+        android:layout_centerInParent="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="10dp"
+        android:text="@string/post_office"
+        app:qmui_isRadiusAdjustBounds="true"/>
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:onClick="Repair_Order_Link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="10dp"
+        android:text="@string/repair_order"
+        app:qmui_isRadiusAdjustBounds="true"/>
 
 </LinearLayout>

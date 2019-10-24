@@ -1,4 +1,4 @@
-package com.is.shane;
+package com.is.shane.secondclass;
 
 
 import android.app.AlertDialog;
@@ -16,17 +16,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
+import com.is.shane.DrawerTabFragment;
+import com.is.shane.R;
+import com.is.shane.SecondClassActivity;
 import com.is.shane.bean.Classes;
 import com.is.shane.repairorder.RepairOrderActivity;
-import com.is.shane.secondclass.CourseFragment;
-import com.is.shane.secondclass.LecturesFragment;
-import com.is.shane.secondclass.TutorialFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,37 +44,51 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+public class SingleTutorialActivity extends DrawerTabFragment {
 
-public class SecondClassActivity extends DrawerTabFragment {
-    private Fragment Course_Fragment;
-    private Fragment Lectures_Fragment;
-    private Fragment Tutorial_Fragment;
-    private TabHost tabHost;
-
-    private static final int GET = 1;
-    OkHttpClient client = new OkHttpClient();
     private AlertDialog alertDialog;
-    private AlertDialog alertInfo;
+    private static final int GET = 1;
+    //报名返回值
+    private String sign_back;
+    //姓名学号变量
+    private String name_get, myid_get;
+    //Intent传值课程id
+    private String tutorial_id;
+    //课程选择变量
+    private int classes_chose;
     //若取消则无值
     private int temp;
     //显示名字
     private String temp_name;
-    //课程选择变量
-    private int classes_chose;
     //显示选择的班级
     private TextView show_classes;
+    //姓名获取
+    private EditText name;
     //学号
     private EditText myid;
     private Button button_post;
-    //学号变量
-    private String myid_get;
     //班级选项定位
     private int classes_position = -1;
 
     private List<Classes> Classes_List = new ArrayList<>();
-
+    private String urlString;
+    OkHttpClient client = new OkHttpClient();
+    //id传值
+    private String Tutorial_chose;
     //报名handler
-    private Handler handler_search = new Handler(){
+    private Handler handler_sign = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case GET:
+                    handle_sign_res(msg.obj.toString());
+                    break;
+            }
+        }
+    };
+    //获取信息handler
+    private Handler handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -95,36 +107,18 @@ public class SecondClassActivity extends DrawerTabFragment {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second_class_main);
-        //将CourseFragment引入
-        Course_Fragment = new CourseFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.Course_Frag, Course_Fragment).commitAllowingStateLoss();
+        setContentView(R.layout.activity_second_class_single_tutorial);
         //找到抽屉
         drawerLayout = findViewById(R.id.draw);
-        //调用菜单显示
-        tabHost = findViewById(R.id.tabs);
-        tabHost.setup();
-        setTabHost();
-        //Tab变动监听
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String s) {
-                switch (s){
-                    case "tab_NewCourse":
-                        Course_Fragment = new CourseFragment();
-                        getSupportFragmentManager().beginTransaction().add(R.id.Course_Frag, Course_Fragment).commitAllowingStateLoss();
-                        break;
-                    case "tab_Lecturers":
-                        Lectures_Fragment = new LecturesFragment();
-                        getSupportFragmentManager().beginTransaction().add(R.id.Lecturers_Frag, Lectures_Fragment).commitAllowingStateLoss();
-                        break;
-                    case "tab_Tutorial":
-                        Tutorial_Fragment = new TutorialFragment();
-                        getSupportFragmentManager().beginTransaction().add(R.id.Tutorial_Frag, Tutorial_Fragment).commitAllowingStateLoss();
-                        break;
-                }
-            }
-        });
+        //Intent传值课程id获取
+        Tutorial_chose = getIntent().getStringExtra("id");
+        //Intent传值课程名获取
+        tutorial_id = getIntent().getStringExtra("tutorial_id");
+        urlString = "https://serv.huihuagongxue.top/IS/public/Android_Tutorial_Info?id="+Tutorial_chose;
+        get_article(urlString);
+
+        //姓名输入框找到
+        name = findViewById(R.id.name);
         //学号输入框找到
         myid = findViewById(R.id.myid);
         //学号只能输入数字
@@ -134,40 +128,54 @@ public class SecondClassActivity extends DrawerTabFragment {
         button_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                name_get = name.getText().toString();
                 myid_get = myid.getText().toString();
-                String str = "https://serv.huihuagongxue.top/IS/public/check?studentid="+myid_get+"&classes="+classes_chose;
-                System.out.println(str);
-                search(str);
+                String str = "https://serv.huihuagongxue.top/IS/public/tutorial_sign?name="+name_get+"&select="+classes_chose+"&pro="+tutorial_id+"&id="+myid_get;
+                sign(str);
             }
         });
     }
 
-    //底部tab菜单
-    private void setTabHost(){
-        tabHost.addTab(tabHost.newTabSpec("tab_NewCourse").setIndicator("新课程")
-                .setContent(R.id.tab_NewCourse));
-        tabHost.addTab(tabHost.newTabSpec("tab_Lecturers").setIndicator("讲师列表")
-                .setContent(R.id.tab_Lecturers));
-        tabHost.addTab(tabHost.newTabSpec("tab_Tutorial").setIndicator("微课报名")
-                .setContent(R.id.tab_Tutorial));
-        tabHost.addTab(tabHost.newTabSpec("tab_Search").setIndicator("查询报名")
-                .setContent(R.id.tab_Search));
+    //处理返回结果
+    private String handle_sign_res(String res){
+        if(res.equals("0")){
+            Intent intent = new Intent();
+            intent.setClass(SingleTutorialActivity.this, SignSucceedActivity.class);
+            startActivity(intent);
+            SingleTutorialActivity.this.finish();
+        }else if (res.equals("1")){
+            Toast toast = Toast.makeText(SingleTutorialActivity.this,"网络原因报名失败！",Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }else if (res.equals("2")){
+            Toast toast = Toast.makeText(SingleTutorialActivity.this,"请勿重复报名！",Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }else if (res.equals("3")){
+            Toast toast = Toast.makeText(SingleTutorialActivity.this,"课程已报满！",Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }else if (res.equals("4")){
+            Toast toast = Toast.makeText(SingleTutorialActivity.this,"填写有空！",Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
+        return res;
     }
 
-
-
     //开启子线程
-    private String search(final String url){
+    private String sign(final String url){
         new Thread(){
             @Override
             public void run() {
                 super.run();
                 try {
-                    String res = run_search(url);
+                    String res = run_sign(url);
+                    sign_back = res;
                     Message msg = Message.obtain();
                     msg.what = GET;
                     msg.obj = res;
-                    handler_search.sendMessage(msg);
+                    handler_sign.sendMessage(msg);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -176,8 +184,8 @@ public class SecondClassActivity extends DrawerTabFragment {
         return url;
     }
 
-    //查询请求
-    private String run_search(String url) throws IOException {
+    //报名请求
+    private String run_sign(String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -189,22 +197,48 @@ public class SecondClassActivity extends DrawerTabFragment {
 
     //处理返回信息
     private void handle_res(String res) throws JSONException {
+        TextView title_view = findViewById(R.id.Tutorial_title);
+        TextView content_view = findViewById(R.id.Tutorial_content);
+        TextView time_view = findViewById(R.id.Tutorial_time);
         JSONObject jsonObject = new JSONObject(res);
-        String classes = (String) jsonObject.get("class");
-        String course = (String) jsonObject.get("course");
-
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setTitle("报名情况");
-        alertBuilder.setMessage("班级："+classes+"\n"+"选择的课程："+course);
-        alertBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                alertInfo.dismiss();
-            }
-        });
-        alertInfo = alertBuilder.create();
-        alertInfo.show();
+        String title = (String) jsonObject.get("title");
+        String content = (String) jsonObject.get("txtcontent");
+        String time = (String) jsonObject.get("time");
+        title_view.setText(title);
+        content_view.setText(content);
+        time_view.setText(time);
     }
+
+    //开启子线程
+    private String get_article(final String url){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    String res = get_info(url);
+                    Message msg = Message.obtain();
+                    msg.what = GET;
+                    msg.obj = res;
+                    handler.sendMessage(msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+        return url;
+    }
+
+    //数据请求
+    private String get_info(String url) throws IOException {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            return response.body().string();
+        }
+    }
+
 
 
 
@@ -238,7 +272,7 @@ public class SecondClassActivity extends DrawerTabFragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 alertDialog.dismiss();
                 classes_chose = temp;
-                show_classes = findViewById(R.id.search_show_classes);
+                show_classes = findViewById(R.id.show_classes);
                 show_classes.setText(temp_name);
             }
         });
@@ -252,6 +286,7 @@ public class SecondClassActivity extends DrawerTabFragment {
         alertDialog = alertBuilder.create();
         alertDialog.show();
     }
+
 
     //url请求回的数据转化成封装好的bean
     private List<Classes> get_Classes_item(String url){
@@ -316,17 +351,16 @@ public class SecondClassActivity extends DrawerTabFragment {
 
     //跳转方法重写
     public void  Second_Class_Link(View view){
-        Intent intent = new Intent(SecondClassActivity.this, SecondClassActivity.class);
-        SecondClassActivity.this.finish();
+        Intent intent = new Intent(SingleTutorialActivity.this, SecondClassActivity.class);
+        SingleTutorialActivity.this.finish();
         startActivity(intent);
     }
     //跳转方法重写
     public void  Repair_Order_Link(View view){
-        Intent intent = new Intent(SecondClassActivity.this, RepairOrderActivity.class);
-        SecondClassActivity.this.finish();
+        Intent intent = new Intent(SingleTutorialActivity.this, RepairOrderActivity.class);
+        SingleTutorialActivity.this.finish();
         startActivity(intent);
     }
-
     //抽屉显示
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -340,7 +374,7 @@ public class SecondClassActivity extends DrawerTabFragment {
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getTitle().equals("back_button")){
             //结束栈
-            SecondClassActivity.this.finish();
+            SingleTutorialActivity.this.finish();
         }else if(item.getTitle().equals("list")) {
             if(click==0){
                 item.setIcon(R.drawable.ic_close);

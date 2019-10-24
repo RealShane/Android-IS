@@ -1,5 +1,4 @@
-package com.is.shane.secondclass;
-
+package com.is.shane.repairorder;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,29 +11,28 @@ import android.view.View;
 import com.is.shane.DrawerTabFragment;
 import com.is.shane.R;
 import com.is.shane.SecondClassActivity;
-import com.is.shane.repairorder.RepairOrderActivity;
 
-public class SignSucceedActivity extends DrawerTabFragment {
+public class RepairOrderActivity extends DrawerTabFragment {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second_class_sign_succeed);
-
+        setContentView(R.layout.activity_repair_order_main);
         //找到抽屉
         drawerLayout = findViewById(R.id.draw);
     }
 
+
     //跳转方法重写
     public void  Second_Class_Link(View view){
-        Intent intent = new Intent(SignSucceedActivity.this, SecondClassActivity.class);
-        SignSucceedActivity.this.finish();
+        Intent intent = new Intent(RepairOrderActivity.this, SecondClassActivity.class);
+        RepairOrderActivity.this.finish();
         startActivity(intent);
     }
     //跳转方法重写
     public void  Repair_Order_Link(View view){
-        Intent intent = new Intent(SignSucceedActivity.this, RepairOrderActivity.class);
-        SignSucceedActivity.this.finish();
+        Intent intent = new Intent(RepairOrderActivity.this, RepairOrderActivity.class);
+        RepairOrderActivity.this.finish();
         startActivity(intent);
     }
 
@@ -51,7 +49,7 @@ public class SignSucceedActivity extends DrawerTabFragment {
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getTitle().equals("back_button")){
             //结束栈
-            SignSucceedActivity.this.finish();
+            RepairOrderActivity.this.finish();
         }else if(item.getTitle().equals("list")) {
             if(click==0){
                 item.setIcon(R.drawable.ic_close);

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/app_primary_color"
-    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -12,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.qmuiteam.qmui.widget.QMUITopBar
-        android:id="@+id/topbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/qmui_topbar_height" />
+            android:id="@+id/topbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/qmui_topbar_height" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -26,10 +24,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <!--报名标题文字-->
                 <TextView
-                    android:id="@+id/Course_id"
-                    android:layout_width="match_parent"
+                    android:id="@+id/Tutorial_title"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/qmui_group_list_section_header_footer_padding_vertical"
                     android:paddingLeft="?attr/qmui_content_padding_horizontal"
@@ -37,20 +36,18 @@
                     android:paddingTop="@dimen/qmui_group_list_section_header_footer_padding_vertical"
                     android:textColor="?attr/qmui_config_color_gray_3"
                     android:textSize="@dimen/qmui_group_list_section_header_footer_text_size" />
-                <!--图-->
-                <com.qmuiteam.qmui.widget.QMUIRadiusImageView
-                    android:id="@+id/Single_Img"
-                    android:layout_width="match_parent"
+                <!--时间-->
+                <TextView
+                    android:id="@+id/Tutorial_time"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:clickable="true"
-                    android:src="@mipmap/code"
-                    app:qmui_border_color="?attr/qmui_config_color_gray_6"
-                    app:qmui_border_width="1px"
-                    app:qmui_corner_radius="60dp"
-                    app:qmui_selected_border_color="?attr/qmui_config_color_gray_4"
-                    app:qmui_selected_border_width="1px"
-                    app:qmui_selected_mask_color="?attr/qmui_config_color_gray_8"/>
+                    android:layout_gravity="right"/>
+
+                <!--文章-->
+                <TextView
+                    android:id="@+id/Tutorial_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
                 <!--边框分割细线-->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -190,4 +187,6 @@
         </ScrollView>
         <include layout="@layout/public_drawer"/>
     </androidx.drawerlayout.widget.DrawerLayout>
+
+
 </LinearLayout>

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -13,7 +14,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background"
             android:orientation="vertical">
             <TabHost
                 android:layout_width="match_parent"
@@ -80,11 +80,21 @@
                             android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <!--搜索框-->
+                            <androidx.appcompat.widget.SearchView
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textSize="50dp"
-                                android:text="这里是"/>
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp"
+                                />
+                            <LinearLayout
+                                android:id="@+id/Tutorial_Frag"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <!--这里是Fragment微课堂列表布局的引入-->
+
+                            </LinearLayout>
 
                         </LinearLayout>
                         <!--查询报名-->
@@ -93,11 +103,14 @@
                             android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="50dp"
-                                android:text="这里是个人页"/>
+                            <LinearLayout
+                                android:id="@+id/Search_Frag"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <!--这里是搜索布局的引入-->
+                                <include layout="@layout/second_class_input"/>
+                            </LinearLayout>
 
                         </LinearLayout>
                     </FrameLayout>

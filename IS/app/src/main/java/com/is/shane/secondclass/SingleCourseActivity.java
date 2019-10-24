@@ -20,9 +20,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.is.shane.DrawerTabFragment;
 import com.is.shane.R;
+import com.is.shane.SecondClassActivity;
 import com.is.shane.bean.Classes;
+import com.is.shane.repairorder.RepairOrderActivity;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,6 +58,8 @@ public class SingleCourseActivity extends DrawerTabFragment {
     private int classes_chose;
     //若取消则无值
     private int temp;
+    //显示名字
+    private String temp_name;
     //Intent传值课程名
     private String Course_chose;
     //Intent传值课程id
@@ -66,6 +72,26 @@ public class SingleCourseActivity extends DrawerTabFragment {
     private EditText myid;
     //报名返回值
     private String sign_back;
+    //显示选择的班级
+    private TextView show_classes;
+    //图片地址
+    private String Single_Img_Url;
+    //图片指向获取
+    private QMUIRadiusImageView single_img;
+    //班级选项定位
+    private int classes_position = -1;
+    private Handler handler_img = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case GET:
+                    handle_img(msg.obj.toString());
+                    break;
+            }
+        }
+    };
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -77,7 +103,6 @@ public class SingleCourseActivity extends DrawerTabFragment {
             }
         }
     };
-    private Button button;
     private Button button_post;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +123,12 @@ public class SingleCourseActivity extends DrawerTabFragment {
         myid = findViewById(R.id.myid);
         //学号只能输入数字
         myid.setInputType(InputType.TYPE_CLASS_NUMBER);
+        //图片GET
+        single_img = findViewById(R.id.Single_Img);
+        Single_Img_Url = "https://serv.huihuagongxue.top/IS/public/Android_Single_Classes_Img?id="+Course_chose;
+        get_url(Single_Img_Url);
 
-        button = findViewById(R.id.button);
+
         button_post = findViewById(R.id.post);
         button_post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +139,11 @@ public class SingleCourseActivity extends DrawerTabFragment {
                 sign(str);
             }
         });
+    }
+    //处理返回图片
+    private String handle_img(String res){
+        Glide.with(SingleCourseActivity.this).load(res).into(single_img);
+        return res;
     }
 
     //处理返回结果
@@ -136,8 +170,37 @@ public class SingleCourseActivity extends DrawerTabFragment {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }
-        System.out.println("这里是返回的结果："+res);
         return res;
+    }
+
+    //开启子线程
+    private String get_url(final String url){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    String res = run_get_url(url);
+                    Message msg = Message.obtain();
+                    msg.what = GET;
+                    msg.obj = res;
+                    handler_img.sendMessage(msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+        return url;
+    }
+
+    //图片请求
+    private String run_get_url(String url) throws IOException {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            return response.body().string();
+        }
     }
 
     //开启子线程
@@ -161,7 +224,7 @@ public class SingleCourseActivity extends DrawerTabFragment {
         return url;
     }
 
-    //okhttp网络请求
+    //报名请求
     private String run_sign(String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
@@ -181,11 +244,13 @@ public class SingleCourseActivity extends DrawerTabFragment {
         }
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setTitle("选择班级");
-        alertBuilder.setSingleChoiceItems(item_classes, -1, new DialogInterface.OnClickListener() {
+        alertBuilder.setSingleChoiceItems(item_classes, classes_position, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 try {
                     temp = items.get().get(i).id;
+                    temp_name = items.get().get(i).name;
+                    classes_position = i;
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -199,6 +264,8 @@ public class SingleCourseActivity extends DrawerTabFragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 alertDialog.dismiss();
                 classes_chose = temp;
+                show_classes = findViewById(R.id.show_classes);
+                show_classes.setText(temp_name);
             }
         });
 
@@ -276,6 +343,18 @@ public class SingleCourseActivity extends DrawerTabFragment {
         }
     }
 
+    //跳转方法重写
+    public void  Second_Class_Link(View view){
+        Intent intent = new Intent(SingleCourseActivity.this, SecondClassActivity.class);
+        SingleCourseActivity.this.finish();
+        startActivity(intent);
+    }
+    //跳转方法重写
+    public void  Repair_Order_Link(View view){
+        Intent intent = new Intent(SingleCourseActivity.this, RepairOrderActivity.class);
+        SingleCourseActivity.this.finish();
+        startActivity(intent);
+    }
     //抽屉显示
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

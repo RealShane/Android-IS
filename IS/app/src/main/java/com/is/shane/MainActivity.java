@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.is.shane.banner.LoopViewAdapter;
 import com.is.shane.banner.pagerOnClickListener;
+import com.is.shane.repairorder.RepairOrderActivity;
 
 import java.util.ArrayList;
 
@@ -148,8 +149,14 @@ public class MainActivity extends DrawerTabFragment {
     }
 
     //跳转方法
-    public void  Second_Class(View view){
+    public void  Second_Class_Link(View view){
         Intent intent = new Intent(MainActivity.this, SecondClassActivity.class);
+        startActivity(intent);
+    }
+
+    //跳转方法
+    public void  Repair_Order_Link(View view){
+        Intent intent = new Intent(MainActivity.this, RepairOrderActivity.class);
         startActivity(intent);
     }
 }
